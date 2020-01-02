@@ -1,0 +1,142 @@
+@import url("https://fonts.googleapis.com/css?family=Dosis:400,700");
+
+/*GLOBAL*/
+/*variables*/
+:root {
+    /*main colors*/
+    --main-color: #323330;
+    --secondary-color: #63695e;
+    --accent-color: #f7df1e;
+    --bg-color: cadetblue;
+}
+
+/*main elements*/
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+ul,
+li {
+    list-style: none;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+body {
+    background-color: var(--bg-color);
+    font: 16px/1.5 "Dosis", sans-serif;
+    line-height: 1.15;
+    color: var(--main-color);
+}
+
+.h1 {
+    color: var(--main-color);
+    text-align: center;
+}
+
+.h1--big {
+    font-size: 60px;
+}
+
+.h1--uppercase {
+    text-transform: uppercase;
+}
+
+.h2 {
+    color: var(--secondary-color);
+    text-align: center;
+}
+
+.h2--big {
+    font-size: 14px;
+}
+
+.h2--uppercase {
+    text-transform: uppercase;
+}
+
+/*overrides*/
+.accent {
+    color: var(--accent-color) !important;
+}
+
+/*END GLOBALS*/
+/*************/
+
+/*LAYOUT*/
+.container {
+    margin: auto;
+    min-height: 100vh;
+}
+
+/*HEADER*/
+.header {}
+
+/*CONTENT*/
+.content {
+    display: flex;
+    height: calc(100vh - 85px - 57px);
+}
+
+.content__image {
+    object-fit: cover;
+}
+
+.content__image--small {
+    width: 200px;
+}
+
+.content__image--large {
+    height: calc(100% - 69px);
+    padding: 20px;
+}
+
+.content__image-data {
+    padding: 20px 20px 0 20px;
+    font-weight: 400;
+    font-size: 16px;
+}
+
+.content__image-author {
+    font-size: 27px;
+}
+
+.content-sidebar__image-list {
+    text-align: center;
+}
+
+.content-sidebar__image-list li {}
+
+.content-sidebar__image-list li img:hover {
+    opacity: 0.7;
+    cursor: pointer;
+}
+
+/*sidebar*/
+.content-sidebar {
+    display: flex;
+    flex-direction: column;
+    overflow-y: scroll;
+    width: 25%;
+}
+
+/*main*/
+.content-main {
+    width: 100%;
+}
+
+/*END CONTENT*/
+/**************/
+
+/*FOOTER*/
+.footer {
+    text-align: center;
+    padding: 10px;
+    font-weight: 700;
+}
