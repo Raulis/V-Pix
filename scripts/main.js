@@ -1,60 +1,102 @@
 'use strict';
 
-const container = document.querySelector('.content-sidebar__image-list');
-const bigImageContainer = document.querySelector('.content-main');
-let images;
+// Check webP support
+// https://davidwalsh.name/detect-webp
+let format;
+async function supportsWebp() {
+    if (!self.createImageBitmap) return false;
 
-(function () {
-    fetch('https://picsum.photos/v2/list')
-        .then(function (resp) {
-            return resp.json();
-        })
-        .then(function (data) {
-            images = data;
-            let smallImages = data
-                .map(data => {
-                    let image = `
-                        <li>
-                            <img class="content__image content__image--small" id="${data.id}" src="https://picsum.photos/id/${data.id}/200" alt="If only this api had any alt for the images">
-                        </li>
-                    `;
-                    return image;
-                })
-                .join('');
-            container.innerHTML = smallImages;
-        });
+    const webpData = 'data:image/webp;base64,UklGRh4AAABXRUJQVlA4TBEAAAAvAAAAAAfQ//73v/+BiOh/AAA=';
+    const blob = await fetch(webpData).then(r => r.blob());
+    return createImageBitmap(blob).then(() => true, () => false);
+}
+
+(async () => {
+    if (await supportsWebp()) {
+        format = '.webp';
+    } else {
+        format = '.jpg';
+    }
 })();
 
-function loadBigImage(e) {
-    //TODO: galbut geriau butu sukurti nauja img taga jei keisti esama?
-    if (e.target.nodeName == 'IMG') {
-        // Clone node of selected image and get id
-        const selectedImage = e.target.cloneNode(true);
-        const selectedImageID = selectedImage.id;
+// Globals
+const container = document.querySelector('.content__sidebar-image-list');
+const bigImageContainer = document.querySelector('.content__big-image');
+let images;
 
-        // Filter image data from loaded images by selected image id
+// Get array of images
+fetch('https://picsum.photos/v2/list')
+    .then((response) => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    // Create small image list
+    .then((data) => {
+        images = data;
+        let smallImages = data
+            .map(data => {
+                let image = `
+                        <li>
+                            <img class="loading content__image content__image--small" id="${data.id}" src="https://picsum.photos/id/${data.id}/200${format}" alt="If only this api had any alt for the images">
+                        </li>
+                    `;
+                return image;
+            })
+            .join('');
+        container.innerHTML += smallImages;
+    })
+    // Preload all big images
+    .then(() => {
+        preloadAllBig();
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
+
+// Function to load Big images in the right side
+function loadBigImage(e) {
+    if (e.target.nodeName == 'IMG') {
+        // Get ID of selected image
+        const selectedImageID = e.target.id;
+
+        // Filter image data from loaded images by selected image ID
         const selectedImageData = images.filter(obj => {
             return obj.id === selectedImageID;
         });
 
-        // Remove and add appropriate classes
-        selectedImage.classList.remove("content__image--small");
-        selectedImage.classList.add("content__image--large");
+        // Create new container for big image
+        // TODO: Would be nice to set appropriate height and width for each image
+        const bigImage = `
+            <img class="content__image content__image--large" id="${selectedImageID}" src="${selectedImageData[0].download_url}${format}" alt="If only this api had any alt for the images">
+        `;
 
-        // Edit image src
-        selectedImage.src = selectedImageData[0].download_url;
-
-        // Insert image to container
+        // Insert image to html
         bigImageContainer.innerHTML = `
             <div class="content__image-data">
                 <h3 class="content__image-author">Author: ${selectedImageData[0].author}</h3>
                 Width: ${selectedImageData[0].width} Height: ${selectedImageData[0].height}
             </div>
-            ${selectedImage.outerHTML}
+            ${bigImage}
         `;
 
     }
-
 }
 
+// Listen for clicks on samall images
 container.addEventListener('click', loadBigImage, false);
+
+// Function to preload all big images 
+function preloadImage(url) {
+    var img = new Image();
+    img.src = url;
+}
+
+function preloadAllBig() {
+    images.map(img => {
+        preloadImage(img.download_url + '.webp');
+    })
+
+    //console.log("all images preloaded");
+}
