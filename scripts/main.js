@@ -49,7 +49,10 @@ fetch('https://picsum.photos/v2/list')
     })
     // Preload all big images
     .then(() => {
-        preloadAllBig();
+        images.map(img => {
+            const reg = new Image();
+            reg.src = img.download_url + format;
+        })
     })
     .catch((error) => {
         console.error('Error:', error);
@@ -86,17 +89,3 @@ function loadBigImage(e) {
 
 // Listen for clicks on samall images
 container.addEventListener('click', loadBigImage, false);
-
-// Function to preload all big images 
-function preloadImage(url) {
-    var img = new Image();
-    img.src = url;
-}
-
-function preloadAllBig() {
-    images.map(img => {
-        preloadImage(img.download_url + '.webp');
-    })
-
-    //console.log("all images preloaded");
-}
