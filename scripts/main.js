@@ -28,7 +28,7 @@ const bigImageContainer = document.querySelector('.content__big-image');
 let images = []; // array of all loaded images
 const state = {
     page: 1, // image page
-    limit: 5, // how many images per page
+    limit: 10, // how many images per page
     firstLoad: false,
     newImages: [], // on new load images are saved here - temporary
     nextLoad: 200, // how many pixels should be scrolled to activate new load of images
@@ -44,14 +44,13 @@ if (!state.firstLoad) {
         state.device = 'mobile';
         // If loaded in landscape mode we need more pictures
         if (window.innerHeight < window.innerWidth) {
-            state.limit = 10;
             state.nextLoad = 200;
         } else {
-            state.nextLoad = 50;
+            state.nextLoad = 500;
         }
     } else {
         state.device = 'desktop';
-        state.nextLoad = 200
+        state.nextLoad = 500
     }
 
     // Load first images
@@ -148,7 +147,7 @@ sideBar.addEventListener('scroll', () => {
         const height = sideBar.scrollTop;
 
         if (height >= state.nextLoad) {
-            state.nextLoad += 1000;
+            state.nextLoad += 2000;
             loadImages()
         }
         //console.log(height);
@@ -157,7 +156,7 @@ sideBar.addEventListener('scroll', () => {
         const width = sideBar.scrollLeft;
 
         if (width >= state.nextLoad) {
-            state.nextLoad += 500;
+            state.nextLoad += 1000;
             loadImages()
         }
     }
