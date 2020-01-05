@@ -56,9 +56,6 @@ if (!state.firstLoad) {
 
     // Load first images
     loadImages();
-
-    // Reset load limit
-    state.limit = 5;
 }
 
 function loadImages() {
