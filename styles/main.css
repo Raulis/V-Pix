@@ -41,7 +41,7 @@ body {
 }
 
 .h1--big {
-    font-size: 60px;
+    font-size: 4rem;
 }
 
 .h1--uppercase {
@@ -54,7 +54,7 @@ body {
 }
 
 .h2--big {
-    font-size: 14px;
+    font-size: 1rem;
 }
 
 .h2--uppercase {
@@ -85,7 +85,7 @@ body {
 /*CONTENT*/
 .content {
     display: flex;
-    height: calc(100vh - 85px - 57px);
+    height: calc(100vh - 91px - 57px);
     /*Full height - header - footer*/
 }
 
@@ -100,7 +100,7 @@ body {
 .content__image--large {
     padding: 20px;
     max-width: 100%;
-    max-height: calc(100% - 69px);
+    max-height: calc(100% - 78px);
 }
 
 /*sidebar with small images*/
@@ -134,11 +134,11 @@ body {
 .content__image-data {
     padding: 20px 20px 0 20px;
     font-weight: 400;
-    font-size: 16px;
+    font-size: 1.2rem;
 }
 
 .content__image-author {
-    font-size: 27px;
+    font-size: 2rem;
 }
 
 /*END CONTENT*/
@@ -163,12 +163,12 @@ body {
         overflow-x: scroll;
         width: 100%;
         height: 240px;
+        margin-top: 15px;
     }
 
     .content__sidebar-image-list {
         width: 100%;
         display: flex;
-        padding-top: 50px;
     }
 
     .content__sidebar-image-list li {
@@ -180,19 +180,19 @@ body {
     }
 
     .h2--big {
-        font-size: 2rem;
+        font-size: 1.3rem;
     }
 
     .h1--big {
-        font-size: 6rem;
+        font-size: 4.5rem;
     }
 
     .content__image-author {
-        font-size: 3rem;
+        font-size: 2rem;
     }
 
     .content__image-data {
-        font-size: 2rem;
+        font-size: 1.5rem;
     }
 
     .content__big-image {
@@ -200,11 +200,53 @@ body {
         height: 80%;
     }
 
+    .content__image--small {
+        width: 100px;
+    }
+
     .content {
-        height: calc(100vh - 146px - 57px);
+        height: calc(100vh - 105px - 66px);
     }
 
     .content__image--large {
-        max-height: calc(100% - 111px);
+        max-height: calc(100% - 83px);
+    }
+
+    .footer {
+        font-size: 1.3rem;
+    }
+}
+
+@media only screen and (max-width: 400px) {
+    .content__sidebar-image-list li {
+        padding-right: 5px;
+    }
+
+    .h2--big {
+        font-size: 1rem;
+    }
+
+    .h1--big {
+        font-size: 3.2rem;
+    }
+
+    .content__image-author {
+        font-size: 1.75rem;
+    }
+
+    .content__image-data {
+        font-size: 1.2rem;
+    }
+
+    .content {
+        height: calc(100vh - 76px - 60px);
+    }
+
+    .content__image--large {
+        max-height: calc(100% - 74px);
+    }
+
+    .footer {
+        font-size: 1.1rem;
     }
 }
