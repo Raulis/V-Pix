@@ -1,3 +1,6 @@
+// Jei per dev toolsus tikrinat kodą, tai reiktų refresho ant 
+// kiekvieno media dydžio: desktop, mobile, landscape.
+// Kad infinite load tvarkingai veiktų iš js pusės.
 'use strict';
 
 // Check webP support
@@ -33,20 +36,29 @@ const state = {
 };
 
 if (!state.firstLoad) {
-    // Load first images
-    loadImages();
-
     // Change state
     state.firstLoad = true;
 
     // Check device
     if (window.innerWidth <= 1000) {
         state.device = 'mobile';
-        state.nextLoad = 50;
+        // If loaded in landscape mode we need more pictures
+        if (window.innerHeight < window.innerWidth) {
+            state.limit = 10;
+            state.nextLoad = 200;
+        } else {
+            state.nextLoad = 50;
+        }
     } else {
         state.device = 'desktop';
         state.nextLoad = 200
     }
+
+    // Load first images
+    loadImages();
+
+    // Reset load limit
+    state.limit = 5;
 }
 
 function loadImages() {
@@ -151,6 +163,5 @@ sideBar.addEventListener('scroll', () => {
             state.nextLoad += 500;
             loadImages()
         }
-        //console.log(width);
     }
 });

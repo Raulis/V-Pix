@@ -153,6 +153,10 @@ body {
 
 /*RESPONSIVENESS*/
 @media only screen and (max-width: 1000px) {
+    .loading {
+        height: 100px;
+    }
+
     .content {
         flex-direction: column;
     }
@@ -162,7 +166,7 @@ body {
         overflow-y: initial;
         overflow-x: scroll;
         width: 100%;
-        height: 240px;
+        height: 100px;
         margin-top: 15px;
     }
 
@@ -214,6 +218,24 @@ body {
 
     .footer {
         font-size: 1.3rem;
+    }
+
+    @media screen and (orientation:landscape) {
+        .content {
+            height: initial;
+        }
+
+        .content__sidebar {
+            height: initial;
+        }
+
+        .content__big-image {
+            height: initial;
+        }
+
+        .content__image--large {
+            max-height: initial;
+        }
     }
 }
 
