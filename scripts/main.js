@@ -22,41 +22,81 @@ async function supportsWebp() {
 // Globals
 const container = document.querySelector('.content__sidebar-image-list');
 const bigImageContainer = document.querySelector('.content__big-image');
-let images;
+let images = []; // array of all loaded images
+const state = {
+    page: 1, // image page
+    limit: 5, // how many images per page
+    firstLoad: false,
+    newImages: [], // on new load images are saved here - temporary
+    nextLoad: 200, // how many pixels should be scrolled to activate new load of images
+    device: '' // mobile or desktop
+};
 
-// Get array of images
-fetch('https://picsum.photos/v2/list')
-    .then((response) => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        return response.json();
-    })
-    // Create small image list
-    .then((data) => {
-        images = data;
-        let smallImages = images
-            .map(images => {
-                let image = `
+if (!state.firstLoad) {
+    // Load first images
+    loadImages();
+
+    // Change state
+    state.firstLoad = true;
+
+    // Check device
+    if (window.innerWidth <= 1000) {
+        state.device = 'mobile';
+        state.nextLoad = 50;
+    } else {
+        state.device = 'desktop';
+        state.nextLoad = 200
+    }
+}
+
+function loadImages() {
+    // Get array of images
+    fetch(`https://picsum.photos/v2/list?page=${state.page}&limit=${state.limit}`)
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        // Create small image list
+        .then((data) => {
+            // Add data to images array
+            images = images.concat(data);
+
+            // Set newly loaded images in temporary array
+            state.newImages = state.newImages.concat(data);
+
+            let smallImages = data
+                .map(data => {
+                    let image = `
                         <li>
-                            <img class="loading content__image content__image--small" id="${images.id}" src="https://picsum.photos/id/${images.id}/200${format}" alt="If only this api had any alt for the images">
+                            <img class="loading content__image content__image--small" id="${data.id}" src="https://picsum.photos/id/${data.id}/200${format}" alt="If only this api had any alt for the images">
                         </li>
                     `;
-                return image;
-            })
-            .join('');
-        container.innerHTML += smallImages;
-    })
-    // Preload all big images
-    .then(() => {
-        images.map(img => {
-            const reg = new Image();
-            reg.src = img.download_url + format;
+                    return image;
+                })
+                .join('');
+
+            // Add small images to front-end
+            container.innerHTML += smallImages;
+
+            // Update page state
+            state.page = state.page + 1;
         })
-    })
-    .catch((error) => {
-        console.error('Error:', error);
-    });
+        // Preload all new big images
+        .then(() => {
+            state.newImages.map(img => {
+                const reg = new Image();
+                reg.src = img.download_url + format;
+            })
+
+            // Reset new images array
+            state.newImages = [];
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+}
 
 // Function to load Big images in the right side
 function loadBigImage(e) {
@@ -89,3 +129,28 @@ function loadBigImage(e) {
 
 // Listen for clicks on samall images
 container.addEventListener('click', loadBigImage, false);
+
+// Check when to load new images
+const sideBar = document.querySelector('.content__sidebar');
+
+sideBar.addEventListener('scroll', () => {
+    if (state.device == 'desktop') {
+        // For desktop
+        const height = sideBar.scrollTop;
+
+        if (height >= state.nextLoad) {
+            state.nextLoad += 1000;
+            loadImages()
+        }
+        //console.log(height);
+    } else {
+        // For mobile
+        const width = sideBar.scrollLeft;
+
+        if (width >= state.nextLoad) {
+            state.nextLoad += 500;
+            loadImages()
+        }
+        //console.log(width);
+    }
+});
