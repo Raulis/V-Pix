@@ -1,7 +1,7 @@
 'use strict';
 
 // Check webP support
-// https://davidwalsh.name/detect-webp
+// Code by https://davidwalsh.name/detect-webp
 let format;
 async function supportsWebp() {
     if (!self.createImageBitmap) return false;
@@ -35,11 +35,11 @@ fetch('https://picsum.photos/v2/list')
     // Create small image list
     .then((data) => {
         images = data;
-        let smallImages = data
-            .map(data => {
+        let smallImages = images
+            .map(images => {
                 let image = `
                         <li>
-                            <img class="loading content__image content__image--small" id="${data.id}" src="https://picsum.photos/id/${data.id}/200${format}" alt="If only this api had any alt for the images">
+                            <img class="loading content__image content__image--small" id="${images.id}" src="https://picsum.photos/id/${images.id}/200${format}" alt="If only this api had any alt for the images">
                         </li>
                     `;
                 return image;
