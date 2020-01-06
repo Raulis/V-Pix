@@ -193,6 +193,9 @@ body {
 
     .content__image-author {
         font-size: 2rem;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
 
     .content__image-data {
